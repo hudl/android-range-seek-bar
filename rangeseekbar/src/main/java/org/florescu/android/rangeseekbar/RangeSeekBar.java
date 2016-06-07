@@ -1,6 +1,7 @@
 /*
 Copyright 2015 Alex Florescu
 Copyright 2014 Stephan Tittel and Yahoo Inc.
+Modifications copyright 2016 Agile Sports Technologies, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,6 +14,15 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+Agile Sports Technologies, Inc. Modifications:
+- Add configurable min/max gap
+- Add configuration to show progress state. Includes ability to configure selected rectangle.
+- Add isDragging flag to on change listener
+- Add configuration to allow entire bar to be dragged
+- Allow right thumb handle image to be configured
+- Expose which handle was last touched in on change listener
+- Add configuration to display icon to left of left thumb
 */
 
 package org.florescu.android.rangeseekbar;
