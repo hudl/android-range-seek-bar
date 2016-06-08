@@ -45,6 +45,10 @@
         <attr name="selectedRectColor" format="color"/>
         <attr name="selectedRectAlpha" format="integer"/>
 
+        <!-- the color and opacity of the selected rect (if control is disabled) -->
+        <attr name="selectedRectDisabledColor" format="color"/>
+        <attr name="selectedRectDisabledAlpha" format="integer"/>
+
         <!-- the stroke color of the selected rect (if visible) -->
         <attr name="selectedRectStrokeColor" format="color"/>
 

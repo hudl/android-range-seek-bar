@@ -269,6 +269,43 @@
             rsb:showSelectedRectStroke="false"
             />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="range seek bar with selected rect that has thumb handles hidden and rect color changed when you toggle the control enabled/disabled"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="toggleSeekBarEnabled"
+            android:text="Toggle Enabled"/>
+
+        <org.florescu.android.rangeseekbar.RangeSeekBar
+            android:id="@+id/rangeSeekBarNoThumbs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            rsb:activeColor="@android:color/holo_orange_dark"
+            rsb:selectedRectColor="@android:color/holo_blue_light"
+            rsb:selectedRectAlpha="200"
+            rsb:thumbNormal="@drawable/left_trim_handle"
+            rsb:thumbDisabled="@drawable/left_trim_handle"
+            rsb:thumbPressed="@drawable/left_trim_handle"
+            rsb:hasDifferentRightThumb="true"
+            rsb:rightThumbNormal="@drawable/right_trim_handle"
+            rsb:rightThumbDisabled="@drawable/right_trim_handle"
+            rsb:rightThumbPressed="@drawable/right_trim_handle"
+            rsb:barHeight="2dp"
+            rsb:showLabels="false"
+            rsb:valuesAboveThumbs="false"
+            rsb:showSelectedRect="true"
+            rsb:allowSelectedRectDrag="true"
+            rsb:showSelectedRectStroke="false"
+            rsb:selectedRectDisabledColor="@color/primary_material_light"
+            rsb:selectedRectDisabledAlpha="255"
+            />
+
     </LinearLayout>
 
 </ScrollView>

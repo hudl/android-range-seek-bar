@@ -24,6 +24,8 @@ Agile Sports Technologies, Inc. Modifications:
 - Expose which handle was last touched in on change listener
 - Add configuration to display icon to left of left thumb
 - Allowing selected rectangle stroke to be switched on/off
+- Ability to show/hide thumbs
+- Can supply different selected rect color and opacity when control is disabled
 */
 
 package org.florescu.android.rangeseekbar;
@@ -155,7 +157,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private int mActiveColor;
     private int mDefaultColor;
     private int mSelectedRectColor;
+    private int mSelectedRectDisabledColor;
     private int mSelectedRectAlpha;
+    private int mSelectedRectDisabledAlpha;
     private int mSelectedRectStrokeColor;
     private int mTextAboveThumbsColor;
     private int mSelectedRectStrokeOffsetDp;
@@ -170,6 +174,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private Matrix mThumbShadowMatrix = new Matrix();
 
     private boolean mActivateOnDefaultValues;
+    private boolean mThumbsAllowed = true;
 
     // Use drawable and not bitmap so we can handle vector drawables
     private Drawable mIconOnBarDrawable;
@@ -247,7 +252,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 mActiveColor = a.getColor(R.styleable.RangeSeekBar_activeColor, ACTIVE_COLOR);
                 mDefaultColor = a.getColor(R.styleable.RangeSeekBar_defaultColor, Color.GRAY);
                 mSelectedRectColor = a.getColor(R.styleable.RangeSeekBar_selectedRectColor, Color.parseColor("#4D4D4D"));
+                mSelectedRectDisabledColor = a.getColor(R.styleable.RangeSeekBar_selectedRectDisabledColor, mSelectedRectColor);
                 mSelectedRectAlpha = a.getInt(R.styleable.RangeSeekBar_selectedRectAlpha, DEFAULT_SELECTED_RECT_ALPHA);
+                mSelectedRectDisabledAlpha = a.getInt(R.styleable.RangeSeekBar_selectedRectDisabledAlpha, mSelectedRectAlpha);
                 mSelectedRectStrokeColor = a.getColor(R.styleable.RangeSeekBar_selectedRectStrokeColor, Color.WHITE);
                 mShowSelectedRectStroke = a.getBoolean(R.styleable.RangeSeekBar_showSelectedRectStroke, true);
                 mSelectedRectStrokeOffsetDp = mShowSelectedRectStroke ? SELECTED_RECT_STROKE_WIDTH_IN_DP/2 : 0;
@@ -376,6 +383,11 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                     mThumbHalfHeight,
                     Path.Direction.CW);
         }
+    }
+
+    public void setShowThumbs(boolean showThumbs) {
+        mThumbsAllowed = showThumbs;
+        invalidate();
     }
 
     public void setProgressValue(T value) {
@@ -775,8 +787,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             mBorderRect.right = normalizedToScreen(normalizedMaxValue) - mThumbHalfWidth;
 
             mBorderPaint.setStyle(Paint.Style.FILL);
-            mBorderPaint.setColor(mSelectedRectColor);
-            mBorderPaint.setAlpha(mSelectedRectAlpha);
+            mBorderPaint.setColor(isEnabled() ? mSelectedRectColor : mSelectedRectDisabledColor);
+            mBorderPaint.setAlpha(isEnabled() ? mSelectedRectAlpha : mSelectedRectDisabledAlpha);
             canvas.drawRect(mBorderRect, mBorderPaint);
 
             if (mShowSelectedRectStroke) {
@@ -890,6 +902,10 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                            Bitmap disabledThumbImage,
                            Bitmap thumbPressedImage,
                            Bitmap thumbImage) {
+        if (!mThumbsAllowed) {
+            return;
+        }
+
         Bitmap buttonToDraw;
         if (!mActivateOnDefaultValues && areSelectedValuesDefault) {
             buttonToDraw = disabledThumbImage;
@@ -909,6 +925,10 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * @param canvas      the canvas on which to draw the shadow
      */
     private void drawThumbShadow(float screenCoord, Canvas canvas) {
+        if (!mThumbsAllowed) {
+            return;
+        }
+
         mThumbShadowMatrix.setTranslate(screenCoord + mThumbShadowXOffset, mTextOffset + mThumbHalfHeight + mThumbShadowYOffset);
         mTranslatedThumbShadowPath.set(mThumbShadowPath);
         mTranslatedThumbShadowPath.transform(mThumbShadowMatrix);
