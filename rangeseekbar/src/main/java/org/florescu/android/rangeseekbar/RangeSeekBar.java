@@ -23,6 +23,9 @@ Agile Sports Technologies, Inc. Modifications:
 - Allow right thumb handle image to be configured
 - Expose which handle was last touched in on change listener
 - Add configuration to display icon to left of left thumb
+- Allowing selected rectangle stroke to be switched on/off
+- Ability to show/hide thumbs
+- Can supply different selected rect color and opacity when control is disabled
 */
 
 package org.florescu.android.rangeseekbar;
@@ -101,6 +104,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private static final int ICON_ON_BAR_SIDE_IN_DP = 20;
 
     private static final int DEFAULT_SELECTED_RECT_ALPHA = 150;
+    private static final int SELECTED_RECT_STROKE_WIDTH_IN_DP = 4;
 
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint shadowPaint = new Paint();
@@ -144,6 +148,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private boolean mSingleThumb;
     private boolean mAlwaysActive;
     private boolean mShowSelectedBorder;
+    private boolean mShowSelectedRectStroke;
     private boolean mShowLabels;
     private boolean mShowTextAboveThumbs;
     private boolean mIsProgressBar;
@@ -152,9 +157,12 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private int mActiveColor;
     private int mDefaultColor;
     private int mSelectedRectColor;
+    private int mSelectedRectDisabledColor;
     private int mSelectedRectAlpha;
+    private int mSelectedRectDisabledAlpha;
     private int mSelectedRectStrokeColor;
     private int mTextAboveThumbsColor;
+    private int mSelectedRectStrokeOffsetDp;
     private double mInBetweenDragMarker;
 
     private boolean mThumbShadow;
@@ -166,6 +174,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private Matrix mThumbShadowMatrix = new Matrix();
 
     private boolean mActivateOnDefaultValues;
+    private boolean mThumbsAllowed = true;
 
     // Use drawable and not bitmap so we can handle vector drawables
     private Drawable mIconOnBarDrawable;
@@ -243,8 +252,12 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 mActiveColor = a.getColor(R.styleable.RangeSeekBar_activeColor, ACTIVE_COLOR);
                 mDefaultColor = a.getColor(R.styleable.RangeSeekBar_defaultColor, Color.GRAY);
                 mSelectedRectColor = a.getColor(R.styleable.RangeSeekBar_selectedRectColor, Color.parseColor("#4D4D4D"));
+                mSelectedRectDisabledColor = a.getColor(R.styleable.RangeSeekBar_selectedRectDisabledColor, mSelectedRectColor);
                 mSelectedRectAlpha = a.getInt(R.styleable.RangeSeekBar_selectedRectAlpha, DEFAULT_SELECTED_RECT_ALPHA);
+                mSelectedRectDisabledAlpha = a.getInt(R.styleable.RangeSeekBar_selectedRectDisabledAlpha, mSelectedRectAlpha);
                 mSelectedRectStrokeColor = a.getColor(R.styleable.RangeSeekBar_selectedRectStrokeColor, Color.WHITE);
+                mShowSelectedRectStroke = a.getBoolean(R.styleable.RangeSeekBar_showSelectedRectStroke, true);
+                mSelectedRectStrokeOffsetDp = mShowSelectedRectStroke ? SELECTED_RECT_STROKE_WIDTH_IN_DP/2 : 0;
                 mAllowSectedRectDrag = mShowSelectedBorder && a.getBoolean(R.styleable.RangeSeekBar_allowSelectedRectDrag, false);
 
                 mAlwaysActive = a.getBoolean(R.styleable.RangeSeekBar_alwaysActive, false);
@@ -344,12 +357,15 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 mTextOffset + mThumbHalfHeight + barHeight / 2);
 
         mBorderRect = new RectF();
-        mBorderRect.top = mTextOffset + PixelUtil.dpToPx(context, 2);
-        mBorderRect.bottom = (mTextOffset + (mThumbHalfHeight*2.0f)) - PixelUtil.dpToPx(context, 2);
+        mBorderRect.top = mTextOffset + PixelUtil.dpToPx(context, mSelectedRectStrokeOffsetDp);
+        mBorderRect.bottom = (mTextOffset + (mThumbHalfHeight*2.0f)) - PixelUtil.dpToPx(context, mSelectedRectStrokeOffsetDp);
 
         mBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mBorderPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mBorderPaint.setStrokeWidth(PixelUtil.dpToPx(context, 4));
+
+        if (mShowSelectedRectStroke) {
+            mBorderPaint.setStrokeWidth(PixelUtil.dpToPx(context, SELECTED_RECT_STROKE_WIDTH_IN_DP));
+        }
 
         // make RangeSeekBar focusable. This solves focus handling issues in case EditText widgets are being used along with the RangeSeekBar within ScrollViews.
         setFocusable(true);
@@ -367,6 +383,11 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                     mThumbHalfHeight,
                     Path.Direction.CW);
         }
+    }
+
+    public void setShowThumbs(boolean showThumbs) {
+        mThumbsAllowed = showThumbs;
+        invalidate();
     }
 
     public void setProgressValue(T value) {
@@ -766,14 +787,16 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             mBorderRect.right = normalizedToScreen(normalizedMaxValue) - mThumbHalfWidth;
 
             mBorderPaint.setStyle(Paint.Style.FILL);
-            mBorderPaint.setColor(mSelectedRectColor);
-            mBorderPaint.setAlpha(mSelectedRectAlpha);
+            mBorderPaint.setColor(isEnabled() ? mSelectedRectColor : mSelectedRectDisabledColor);
+            mBorderPaint.setAlpha(isEnabled() ? mSelectedRectAlpha : mSelectedRectDisabledAlpha);
             canvas.drawRect(mBorderRect, mBorderPaint);
 
-            mBorderPaint.setStyle(Paint.Style.STROKE);
-            mBorderPaint.setColor(mSelectedRectStrokeColor);
-            mBorderPaint.setAlpha(255);
-            canvas.drawRect(mBorderRect, mBorderPaint);
+            if (mShowSelectedRectStroke) {
+                mBorderPaint.setStyle(Paint.Style.STROKE);
+                mBorderPaint.setColor(mSelectedRectStrokeColor);
+                mBorderPaint.setAlpha(255);
+                canvas.drawRect(mBorderRect, mBorderPaint);
+            }
         }
 
         // draw minimum thumb (& shadow if requested) if not a single thumb control
@@ -879,6 +902,10 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                            Bitmap disabledThumbImage,
                            Bitmap thumbPressedImage,
                            Bitmap thumbImage) {
+        if (!mThumbsAllowed) {
+            return;
+        }
+
         Bitmap buttonToDraw;
         if (!mActivateOnDefaultValues && areSelectedValuesDefault) {
             buttonToDraw = disabledThumbImage;
@@ -898,6 +925,10 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * @param canvas      the canvas on which to draw the shadow
      */
     private void drawThumbShadow(float screenCoord, Canvas canvas) {
+        if (!mThumbsAllowed) {
+            return;
+        }
+
         mThumbShadowMatrix.setTranslate(screenCoord + mThumbShadowXOffset, mTextOffset + mThumbHalfHeight + mThumbShadowYOffset);
         mTranslatedThumbShadowPath.set(mThumbShadowPath);
         mTranslatedThumbShadowPath.transform(mThumbShadowMatrix);

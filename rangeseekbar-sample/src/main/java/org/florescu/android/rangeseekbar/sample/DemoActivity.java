@@ -27,6 +27,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
@@ -60,5 +61,11 @@ public class DemoActivity extends Activity {
         RangeSeekBar rangeSeekBarIconOnBarWithCode = (RangeSeekBar) findViewById(R.id.rangeSeekBarIconOnBarWithCode);
         Drawable iconOnBarDrawable = ContextCompat.getDrawable(this, android.R.drawable.ic_lock_idle_alarm);
         rangeSeekBarIconOnBarWithCode.setIconOnBar(iconOnBarDrawable, Color.WHITE);
+    }
+
+    public void toggleSeekBarEnabled(View v) {
+        RangeSeekBar rangeSeekBarNoThumbs = (RangeSeekBar) findViewById(R.id.rangeSeekBarNoThumbs);
+        rangeSeekBarNoThumbs.setEnabled(!rangeSeekBarNoThumbs.isEnabled());
+        rangeSeekBarNoThumbs.setShowThumbs(rangeSeekBarNoThumbs.isEnabled());
     }
 }
