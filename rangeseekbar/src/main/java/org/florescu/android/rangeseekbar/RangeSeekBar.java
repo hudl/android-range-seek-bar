@@ -953,8 +953,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         int right = left + sidePx;
         int bottom = top + sidePx;
 
-        // Don't draw icon if right thumb overlaps it
-        if (right < normalizedToScreen(normalizedMaxValue) - (mThumbHalfWidth * 2)) {
+        // Don't draw icon if right thumb is allowed and overlaps it
+        if (!mThumbsAllowed || right < normalizedToScreen(normalizedMaxValue) - (mThumbHalfWidth * 2)) {
             // Mutate so we don't change color filter for other drawables from same image rsc
             mIconOnBarDrawable.setBounds(left, top, right, bottom);
             mIconOnBarDrawable.draw(canvas);
