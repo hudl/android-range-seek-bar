@@ -60,7 +60,7 @@ public class DemoActivity extends Activity {
         // Seek bar for which we will set icon on bar and its color in code
         RangeSeekBar rangeSeekBarIconOnBarWithCode = (RangeSeekBar) findViewById(R.id.rangeSeekBarIconOnBarWithCode);
         Drawable iconOnBarDrawable = ContextCompat.getDrawable(this, android.R.drawable.ic_lock_idle_alarm);
-        rangeSeekBarIconOnBarWithCode.setIconOnBar(iconOnBarDrawable, Color.WHITE);
+        rangeSeekBarIconOnBarWithCode.setIconOnBar(iconOnBarDrawable, Color.WHITE, true);
     }
 
     public void toggleSeekBarEnabled(View v) {

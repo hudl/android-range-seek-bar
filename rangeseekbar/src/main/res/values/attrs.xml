@@ -85,6 +85,9 @@
         <!-- the color of the icon on the bar -->
         <attr name="iconOnBarColor" format="color"/>
 
+        <!-- whether icon should be drawn on the bar if it will overlap thumb -->
+        <attr name="iconOnBarCanOverlapThumb" format="boolean"/>
+
     </declare-styleable>
 
 </resources>

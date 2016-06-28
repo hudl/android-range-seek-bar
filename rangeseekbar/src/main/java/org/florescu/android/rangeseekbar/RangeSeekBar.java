@@ -179,6 +179,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     // Use drawable and not bitmap so we can handle vector drawables
     private Drawable mIconOnBarDrawable;
     private int mIconOnBarColor;
+    private boolean mIconOnBarCanOverlapThumb;
 
     public RangeSeekBar(Context context) {
         super(context);
@@ -308,6 +309,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 mIconOnBarDrawable = a.getDrawable(R.styleable.RangeSeekBar_iconOnBar);
                 mIconOnBarColor = a.getColor(R.styleable.RangeSeekBar_iconOnBarColor,
                         Color.WHITE);
+                mIconOnBarCanOverlapThumb = a.getBoolean(R.styleable.RangeSeekBar_iconOnBarCanOverlapThumb, false);
 
                 if (mIconOnBarDrawable != null) {
                     // Mutate so we don't change color filter for other drawables from same image rsc
@@ -517,10 +519,13 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * Sets the icon to draw to the right of the min value
      * @param iconOnBarDrawable Drawable of icon to draw
      * @param iconOnBarColor Color of icon to draw
+     * @param iconOnBarCanOverlapThumb Whether icon should be drawn on bar if thumb will overlap it
      */
-    public void setIconOnBar(Drawable iconOnBarDrawable, int iconOnBarColor) {
+    public void setIconOnBar(Drawable iconOnBarDrawable, int iconOnBarColor,
+                             boolean iconOnBarCanOverlapThumb) {
         mIconOnBarDrawable = iconOnBarDrawable;
         mIconOnBarColor = iconOnBarColor;
+        mIconOnBarCanOverlapThumb = iconOnBarCanOverlapThumb;
 
         if (mIconOnBarDrawable != null) {
             // Mutate so we don't change color filter for other drawables from same image rsc
@@ -945,16 +950,49 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             return;
         }
 
-        final int iconLeftMarginPx = dpToPx(ICON_ON_BAR_LEFT_MARGIN_IN_DP);
         final int iconTopMarginPx = dpToPx(ICON_ON_BAR_TOP_MARGIN_IN_DP);
-        final int sidePx = dpToPx(ICON_ON_BAR_SIDE_IN_DP);
+        final int iconLeftMarginPx = dpToPx(ICON_ON_BAR_LEFT_MARGIN_IN_DP);
+        boolean drawIcon = false;
+        int sidePx = dpToPx(ICON_ON_BAR_SIDE_IN_DP);
         int left = (int) (normalizedToScreen(normalizedMinValue) + iconLeftMarginPx);
         int top = iconTopMarginPx;
         int right = left + sidePx;
         int bottom = top + sidePx;
 
-        // Don't draw icon if right thumb is allowed and overlaps it
-        if (!mThumbsAllowed || right < normalizedToScreen(normalizedMaxValue) - (mThumbHalfWidth * 2)) {
+        // If thumb will overlap icon
+        if (right > normalizedToScreen(normalizedMaxValue) - (mThumbHalfWidth * 2)) {
+            // If we are allowed to draw icon over thumb
+            if (mIconOnBarCanOverlapThumb) {
+                int iconDrawAreaLeft = (int) normalizedToScreen(normalizedMinValue);
+                int iconDrawAreaRight = (int) normalizedToScreen(normalizedMaxValue);
+
+                // Determine the max width/height available to draw icon
+                int maxSidePx = iconDrawAreaRight - iconDrawAreaLeft;
+
+                // If we have any room to draw icon
+                if (maxSidePx > 0) {
+                    // If room to draw icon is too small to fit icon at its default size, shrink
+                    // icon to fit
+                    if (maxSidePx < sidePx) {
+                        sidePx = maxSidePx;
+                        left = iconDrawAreaLeft;
+                    // Else there is room to draw icon at its default size. Just make sure we center
+                    // it (as we are likely eating into our default left margin).
+                    } else {
+                        left = iconDrawAreaLeft + (maxSidePx - sidePx) / 2;
+                    }
+
+                    right = left + sidePx;
+                    bottom = top + sidePx;
+                    drawIcon = true;
+                }
+            }
+        // Else thumb will not overlap icon
+        } else {
+            drawIcon = true;
+        }
+
+        if (drawIcon) {
             // Mutate so we don't change color filter for other drawables from same image rsc
             mIconOnBarDrawable.setBounds(left, top, right, bottom);
             mIconOnBarDrawable.draw(canvas);
