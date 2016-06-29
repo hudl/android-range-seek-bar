@@ -950,7 +950,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             return;
         }
 
-        final int iconTopMarginPx = dpToPx(ICON_ON_BAR_TOP_MARGIN_IN_DP);
+        final int iconTopMarginPx = dpToPx(ICON_ON_BAR_TOP_MARGIN_IN_DP) - (mShowSelectedRectStroke
+                ? 0
+                : dpToPx(SELECTED_RECT_STROKE_WIDTH_IN_DP/2));
         final int iconLeftMarginPx = dpToPx(ICON_ON_BAR_LEFT_MARGIN_IN_DP);
         boolean drawIcon = false;
         int sidePx = dpToPx(ICON_ON_BAR_SIDE_IN_DP);
