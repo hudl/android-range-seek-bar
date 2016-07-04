@@ -239,6 +239,7 @@
             rsb:valuesAboveThumbs="false"
             rsb:showSelectedRect="true"
             rsb:allowSelectedRectDrag="true"
+            rsb:showSelectedRectStroke="false"
             />
 
         <TextView
@@ -305,6 +306,31 @@
             rsb:selectedRectDisabledColor="@color/primary_material_light"
             rsb:selectedRectDisabledAlpha="255"
             />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="range seek bar with selected rect over thumbs"
+            />
+
+        <org.florescu.android.rangeseekbar.RangeSeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            rsb:activeColor="@android:color/holo_orange_dark"
+            rsb:selectedRectColor="@android:color/holo_blue_light"
+            rsb:selectedRectAlpha="200"
+            rsb:barHeight="2dp"
+            rsb:showLabels="false"
+            rsb:valuesAboveThumbs="false"
+            rsb:showSelectedRect="true"
+            rsb:showSelectedRectOverThumbs="true"
+            rsb:allowSelectedRectDrag="true"
+            rsb:showSelectedRectStroke="false"
+            rsb:selectedRectDisabledColor="@color/primary_material_light"
+            rsb:selectedRectDisabledAlpha="255"
+            />
+
 
     </LinearLayout>
 

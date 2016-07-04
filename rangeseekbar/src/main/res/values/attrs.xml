@@ -14,6 +14,9 @@
         <!-- show a rectangle border around the selected area (the area in between the range labels) -->
         <attr name="showSelectedRect" format="boolean"/>
 
+        <!-- show a rectangle border around the selected area including the mid-way point in each thumb -->
+        <attr name="showSelectedRectOverThumbs" format="boolean"/>
+
         <!-- Toggles the border around the selected rect on/off -->
         <attr name="showSelectedRectStroke" format="boolean"/>
 
