@@ -26,6 +26,7 @@ Agile Sports Technologies, Inc. Modifications:
 - Allowing selected rectangle stroke to be switched on/off
 - Ability to show/hide thumbs
 - Can supply different selected rect color and opacity when control is disabled
+- Can choose if selected rect sits in between the left and right thumb or over them
 */
 
 package org.florescu.android.rangeseekbar;
@@ -148,6 +149,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private boolean mSingleThumb;
     private boolean mAlwaysActive;
     private boolean mShowSelectedBorder;
+    private boolean mShowSelectedRectOverThumbs;
     private boolean mShowSelectedRectStroke;
     private boolean mShowLabels;
     private boolean mShowTextAboveThumbs;
@@ -247,6 +249,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 mTextAboveThumbsColor = a.getColor(R.styleable.RangeSeekBar_textAboveThumbsColor, Color.WHITE);
                 mSingleThumb = a.getBoolean(R.styleable.RangeSeekBar_singleThumb, false);
                 mShowSelectedBorder = a.getBoolean(R.styleable.RangeSeekBar_showSelectedRect, false);
+                mShowSelectedRectOverThumbs = a.getBoolean(R.styleable.RangeSeekBar_showSelectedRectOverThumbs, false);
                 mShowLabels = a.getBoolean(R.styleable.RangeSeekBar_showLabels, true);
                 mInternalPad = a.getDimensionPixelSize(R.styleable.RangeSeekBar_internalPadding, INITIAL_PADDING_IN_DP);
                 barHeight = a.getDimensionPixelSize(R.styleable.RangeSeekBar_barHeight, LINE_HEIGHT_IN_DP);
@@ -788,8 +791,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
         // Border around thumbs
         if (mShowSelectedBorder) {
-            mBorderRect.left = mRect.left + mThumbHalfWidth;
-            mBorderRect.right = normalizedToScreen(normalizedMaxValue) - mThumbHalfWidth;
+            mBorderRect.left = mRect.left + (mShowSelectedRectOverThumbs ? 0 : mThumbHalfWidth);
+            mBorderRect.right = normalizedToScreen(normalizedMaxValue) - (mShowSelectedRectOverThumbs ? 0 : mThumbHalfWidth);
 
             mBorderPaint.setStyle(Paint.Style.FILL);
             mBorderPaint.setColor(isEnabled() ? mSelectedRectColor : mSelectedRectDisabledColor);
