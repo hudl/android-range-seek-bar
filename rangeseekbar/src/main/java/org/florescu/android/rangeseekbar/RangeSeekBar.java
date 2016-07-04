@@ -182,6 +182,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private Drawable mIconOnBarDrawable;
     private int mIconOnBarColor;
     private boolean mIconOnBarCanOverlapThumb;
+    private int mIconOnBarLeftMargin;
 
     public RangeSeekBar(Context context) {
         super(context);
@@ -313,6 +314,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 mIconOnBarColor = a.getColor(R.styleable.RangeSeekBar_iconOnBarColor,
                         Color.WHITE);
                 mIconOnBarCanOverlapThumb = a.getBoolean(R.styleable.RangeSeekBar_iconOnBarCanOverlapThumb, false);
+                mIconOnBarLeftMargin = a.getDimensionPixelSize(R.styleable.RangeSeekBar_iconOnBarLeftMargin, dpToPx(ICON_ON_BAR_LEFT_MARGIN_IN_DP));
 
                 if (mIconOnBarDrawable != null) {
                     // Mutate so we don't change color filter for other drawables from same image rsc
@@ -956,10 +958,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         final int iconTopMarginPx = dpToPx(ICON_ON_BAR_TOP_MARGIN_IN_DP) - (mShowSelectedRectStroke
                 ? 0
                 : dpToPx(SELECTED_RECT_STROKE_WIDTH_IN_DP));
-        final int iconLeftMarginPx = dpToPx(ICON_ON_BAR_LEFT_MARGIN_IN_DP);
         boolean drawIcon = false;
         int sidePx = dpToPx(ICON_ON_BAR_SIDE_IN_DP);
-        int left = (int) (normalizedToScreen(normalizedMinValue) + iconLeftMarginPx);
+        int left = (int) (normalizedToScreen(normalizedMinValue) + mIconOnBarLeftMargin);
         int top = iconTopMarginPx;
         int right = left + sidePx;
         int bottom = top + sidePx;

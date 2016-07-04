@@ -315,6 +315,7 @@
             />
 
         <org.florescu.android.rangeseekbar.RangeSeekBar
+            android:id="@+id/rangeSeekBarOffsetIcon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             rsb:activeColor="@android:color/holo_orange_dark"
@@ -329,6 +330,7 @@
             rsb:showSelectedRectStroke="false"
             rsb:selectedRectDisabledColor="@color/primary_material_light"
             rsb:selectedRectDisabledAlpha="255"
+            rsb:iconOnBarLeftMargin="5dp"
             />
 
 

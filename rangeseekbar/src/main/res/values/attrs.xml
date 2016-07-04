@@ -91,6 +91,9 @@
         <!-- whether icon should be drawn on the bar if it will overlap thumb -->
         <attr name="iconOnBarCanOverlapThumb" format="boolean"/>
 
+        <!-- Left margin for icon on bar -->
+        <attr name="iconOnBarLeftMargin" format="dimension"/>
+
     </declare-styleable>
 
 </resources>
