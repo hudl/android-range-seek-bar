@@ -61,6 +61,9 @@ public class DemoActivity extends Activity {
         RangeSeekBar rangeSeekBarIconOnBarWithCode = (RangeSeekBar) findViewById(R.id.rangeSeekBarIconOnBarWithCode);
         Drawable iconOnBarDrawable = ContextCompat.getDrawable(this, android.R.drawable.ic_lock_idle_alarm);
         rangeSeekBarIconOnBarWithCode.setIconOnBar(iconOnBarDrawable, Color.WHITE, true);
+
+        RangeSeekBar rangeSeekBarOffsetIcon = (RangeSeekBar) findViewById(R.id.rangeSeekBarOffsetIcon);
+        rangeSeekBarOffsetIcon.setIconOnBar(iconOnBarDrawable, Color.WHITE, true);
     }
 
     public void toggleSeekBarEnabled(View v) {
