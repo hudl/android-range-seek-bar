@@ -22,7 +22,7 @@ Agile Sports Technologies, Inc. Modifications:
 - Add configuration to allow entire bar to be dragged
 - Allow right thumb handle image to be configured
 - Expose which handle was last touched in on change listener
-- Add configuration to display icon to left of left thumb
+- Add configuration to display icon to left of left thumb. Top and left margins of icon are configurable.
 - Allowing selected rectangle stroke to be switched on/off
 - Ability to show/hide thumbs
 - Can supply different selected rect color and opacity when control is disabled
@@ -100,8 +100,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
     private static final int LINE_HEIGHT_IN_DP = 1;
 
-    private static final int ICON_ON_BAR_TOP_MARGIN_IN_DP = 10;
-    private static final int ICON_ON_BAR_LEFT_MARGIN_IN_DP = 20;
+    private static final int ICON_ON_BAR_DEFAULT_TOP_MARGIN_IN_DP = 10;
+    private static final int ICON_ON_BAR_DEFAULT_LEFT_MARGIN_IN_DP = 20;
     private static final int ICON_ON_BAR_SIDE_IN_DP = 20;
 
     private static final int DEFAULT_SELECTED_RECT_ALPHA = 150;
@@ -183,6 +183,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private int mIconOnBarColor;
     private boolean mIconOnBarCanOverlapThumb;
     private int mIconOnBarLeftMargin;
+    private int mIconOnBarTopMargin;
 
     public RangeSeekBar(Context context) {
         super(context);
@@ -314,7 +315,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 mIconOnBarColor = a.getColor(R.styleable.RangeSeekBar_iconOnBarColor,
                         Color.WHITE);
                 mIconOnBarCanOverlapThumb = a.getBoolean(R.styleable.RangeSeekBar_iconOnBarCanOverlapThumb, false);
-                mIconOnBarLeftMargin = a.getDimensionPixelSize(R.styleable.RangeSeekBar_iconOnBarLeftMargin, dpToPx(ICON_ON_BAR_LEFT_MARGIN_IN_DP));
+                mIconOnBarLeftMargin = a.getDimensionPixelSize(R.styleable.RangeSeekBar_iconOnBarLeftMargin, dpToPx(ICON_ON_BAR_DEFAULT_LEFT_MARGIN_IN_DP));
+                mIconOnBarTopMargin = a.getDimensionPixelSize(R.styleable.RangeSeekBar_iconOnBarTopMargin, dpToPx(ICON_ON_BAR_DEFAULT_TOP_MARGIN_IN_DP));
 
                 if (mIconOnBarDrawable != null) {
                     // Mutate so we don't change color filter for other drawables from same image rsc
@@ -955,9 +957,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             return;
         }
 
-        final int iconTopMarginPx = dpToPx(ICON_ON_BAR_TOP_MARGIN_IN_DP) - (mShowSelectedRectStroke
-                ? 0
-                : dpToPx(SELECTED_RECT_STROKE_WIDTH_IN_DP));
+        final int iconTopMarginPx = mIconOnBarTopMargin -
+                (mShowSelectedRectStroke ? 0 : dpToPx(SELECTED_RECT_STROKE_WIDTH_IN_DP));
         boolean drawIcon = false;
         int sidePx = dpToPx(ICON_ON_BAR_SIDE_IN_DP);
         int left = (int) (normalizedToScreen(normalizedMinValue) + mIconOnBarLeftMargin);
