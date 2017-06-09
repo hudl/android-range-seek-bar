@@ -34,6 +34,10 @@ import org.florescu.android.rangeseekbar.RangeSeekBar;
 
 public class DemoActivity extends Activity {
 
+    private static final int SEEK_BAR_NEW_DEFAULT_HEIGHT = 60;
+
+    private int mInitialDefaultHeight;
+
     /**
      * Called when the activity is first created.
      */
@@ -64,11 +68,31 @@ public class DemoActivity extends Activity {
 
         RangeSeekBar rangeSeekBarOffsetIcon = (RangeSeekBar) findViewById(R.id.rangeSeekBarOffsetIcon);
         rangeSeekBarOffsetIcon.setIconOnBar(iconOnBarDrawable, Color.WHITE, true);
+
+        // Disabled seek bar with a changeable height
+        RangeSeekBar rangeSeekBarChangeHeight = (RangeSeekBar) findViewById(R.id.rangeSeekBarChangeHeight);
+        rangeSeekBarChangeHeight.setEnabled(false);
+        rangeSeekBarChangeHeight.setShowThumbs(false);
+        mInitialDefaultHeight = rangeSeekBarChangeHeight.getDefaultHeight();
     }
 
     public void toggleSeekBarEnabled(View v) {
         RangeSeekBar rangeSeekBarNoThumbs = (RangeSeekBar) findViewById(R.id.rangeSeekBarNoThumbs);
         rangeSeekBarNoThumbs.setEnabled(!rangeSeekBarNoThumbs.isEnabled());
         rangeSeekBarNoThumbs.setShowThumbs(rangeSeekBarNoThumbs.isEnabled());
+    }
+
+    public void changeSeekBarHeight(View v) {
+        RangeSeekBar rangeSeekBarChangeableHeight =
+                (RangeSeekBar) findViewById(R.id.rangeSeekBarChangeHeight);
+
+        int iconOnBarSide = rangeSeekBarChangeableHeight.getDefaultHeight();
+        if (iconOnBarSide == mInitialDefaultHeight) {
+            rangeSeekBarChangeableHeight.setDefaultHeight(SEEK_BAR_NEW_DEFAULT_HEIGHT);
+        } else {
+            rangeSeekBarChangeableHeight.setDefaultHeight(mInitialDefaultHeight);
+        }
+
+        rangeSeekBarChangeableHeight.invalidate();
     }
 }
