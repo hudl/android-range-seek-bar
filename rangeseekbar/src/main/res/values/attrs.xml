@@ -95,6 +95,13 @@
         <attr name="iconOnBarLeftMargin" format="dimension"/>
         <attr name="iconOnBarTopMargin" format="dimension"/>
 
+        <!-- Width and height of (square) icon on bar -->
+        <attr name="iconOnBarSide" format="dimension"/>
+
+        <!-- Default height of bar (when thumbs are not allowed and therefore their height do not
+             factor in, for example) -->
+        <attr name="defaultHeight" format="dimension"/>
+
     </declare-styleable>
 
 </resources>

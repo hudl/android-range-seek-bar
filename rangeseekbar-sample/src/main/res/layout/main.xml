@@ -274,7 +274,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:text="range seek bar with selected rect that has thumb handles hidden and rect color changed when you toggle the control enabled/disabled"
+            android:text="Range seek bar with selected rect that has thumb handles hidden and rect color changed when you toggle the control enabled/disabled"
             />
 
         <Button
@@ -311,7 +311,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:text="range seek bar with selected rect over thumbs"
+            android:text="Disabled range seek bar with changeable height"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="changeSeekBarHeight"
+            android:text="Change Height"/>
+
+        <org.florescu.android.rangeseekbar.RangeSeekBar
+            android:id="@+id/rangeSeekBarChangeHeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            rsb:showSelectedRect="true"
+            rsb:showSelectedRectOverThumbs="true"
+            rsb:selectedRectColor="#4e5d6c"
+            rsb:showSelectedRectStroke="false"
+            rsb:showLabels="false"
+            rsb:valuesAboveThumbs="false"
+            rsb:iconOnBarLeftMargin="2dp"
+            rsb:iconOnBarTopMargin="8dp"
+            rsb:iconOnBarSide="14dp"
+            rsb:iconOnBar="@mipmap/ic_launcher"
+            rsb:iconOnBarColor="@android:color/white"
+            rsb:internalPadding="5dp"
+            rsb:barHeight="0dp"
+            rsb:defaultHeight="48dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="Range seek bar with selected rect over thumbs"
             />
 
         <org.florescu.android.rangeseekbar.RangeSeekBar
@@ -332,7 +364,6 @@
             rsb:selectedRectDisabledAlpha="255"
             rsb:iconOnBarLeftMargin="5dp"
             />
-
 
     </LinearLayout>
 
