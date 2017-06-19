@@ -1037,7 +1037,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         int bottom = top + sidePx;
 
         // If thumb will overlap icon
-        if (right > normalizedToScreen(normalizedMaxValue) - (mThumbHalfWidth * 2)) {
+        if (mThumbsAllowed &&
+                (right > (normalizedToScreen(normalizedMaxValue) - (mThumbHalfWidth * 2)))) {
             // If we are allowed to draw icon over thumb
             if (mIconOnBarCanOverlapThumb) {
                 int iconDrawAreaLeft = (int) normalizedToScreen(normalizedMinValue);
