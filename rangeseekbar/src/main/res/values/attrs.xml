@@ -44,13 +44,15 @@
         <!-- the color of the text above thumbs -->
         <attr name="textAboveThumbsColor" format="color"/>
 
-        <!-- the color and opacity of the selected rect (if visible) -->
+        <!-- the color, opacity, and corner radius of the selected rect (if visible) -->
         <attr name="selectedRectColor" format="color"/>
         <attr name="selectedRectAlpha" format="integer"/>
+        <attr name="selectedRectCornerRadius" format="dimension"/>
 
-        <!-- the color and opacity of the selected rect (if control is disabled) -->
+        <!-- the color, opacity, and corner radius of the selected rect (if control is disabled) -->
         <attr name="selectedRectDisabledColor" format="color"/>
         <attr name="selectedRectDisabledAlpha" format="integer"/>
+        <attr name="selectedRectDisabledCornerRadius" format="dimension"/>
 
         <!-- the stroke color of the selected rect (if visible) -->
         <attr name="selectedRectStrokeColor" format="color"/>

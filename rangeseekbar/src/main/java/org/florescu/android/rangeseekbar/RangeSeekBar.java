@@ -52,6 +52,7 @@ import android.os.Parcelable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -108,6 +109,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private static final int ICON_ON_BAR_DEFAULT_SIDE_IN_DP = 20;
 
     private static final int DEFAULT_SELECTED_RECT_ALPHA = 150;
+    private static final int DEFAULT_SELECTED_RECT_CORNER_RADIUS_PX = 0;
     private static final int SELECTED_RECT_STROKE_WIDTH_IN_DP = 4;
 
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -173,6 +175,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private int mSelectedRectDisabledColor;
     private int mSelectedRectAlpha;
     private int mSelectedRectDisabledAlpha;
+    private int mSelectedRectCornerRadius = DEFAULT_SELECTED_RECT_CORNER_RADIUS_PX;
+    private int mSelectedRectDisabledCornerRadius = DEFAULT_SELECTED_RECT_CORNER_RADIUS_PX;
     private int mSelectedRectStrokeColor;
     private int mTextAboveThumbsColor;
     private int mThumbShadowColor;
@@ -292,6 +296,12 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                 mSelectedRectDisabledColor = a.getColor(R.styleable.RangeSeekBar_selectedRectDisabledColor, mSelectedRectColor);
                 mSelectedRectAlpha = a.getInt(R.styleable.RangeSeekBar_selectedRectAlpha, DEFAULT_SELECTED_RECT_ALPHA);
                 mSelectedRectDisabledAlpha = a.getInt(R.styleable.RangeSeekBar_selectedRectDisabledAlpha, mSelectedRectAlpha);
+                mSelectedRectCornerRadius =
+                        a.getDimensionPixelSize(R.styleable.RangeSeekBar_selectedRectCornerRadius,
+                                DEFAULT_SELECTED_RECT_CORNER_RADIUS_PX);
+                mSelectedRectDisabledCornerRadius =
+                        a.getDimensionPixelSize(R.styleable.RangeSeekBar_selectedRectDisabledCornerRadius,
+                                DEFAULT_SELECTED_RECT_CORNER_RADIUS_PX);
                 mSelectedRectStrokeColor = a.getColor(R.styleable.RangeSeekBar_selectedRectStrokeColor, Color.WHITE);
                 mShowSelectedRectStroke = a.getBoolean(R.styleable.RangeSeekBar_showSelectedRectStroke, true);
                 mSelectedRectStrokeOffsetDp = mShowSelectedRectStroke ? SELECTED_RECT_STROKE_WIDTH_IN_DP/2 : 0;
@@ -871,7 +881,15 @@ public class RangeSeekBar<T extends Number> extends ImageView {
             mBorderPaint.setStyle(Paint.Style.FILL);
             mBorderPaint.setColor(isEnabled() ? mSelectedRectColor : mSelectedRectDisabledColor);
             mBorderPaint.setAlpha(isEnabled() ? mSelectedRectAlpha : mSelectedRectDisabledAlpha);
-            canvas.drawRect(mBorderRect, mBorderPaint);
+            float cornerRadius = isEnabled() ? mSelectedRectCornerRadius :
+                    mSelectedRectDisabledCornerRadius;
+
+            if (cornerRadius > 0) {
+                canvas.drawRoundRect(mBorderRect, cornerRadius, cornerRadius, mBorderPaint);
+            } else {
+                canvas.drawRect(mBorderRect, mBorderPaint);
+            }
+
 
             if (mShowSelectedRectStroke) {
                 mBorderPaint.setStyle(Paint.Style.STROKE);
