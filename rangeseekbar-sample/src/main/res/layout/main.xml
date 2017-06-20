@@ -311,7 +311,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
-            android:text="Disabled range seek bar with changeable height"
+            android:text="Disabled range seek bar with rounded corners and changeable height"
             />
 
         <Button
@@ -325,6 +325,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             rsb:showSelectedRect="true"
+            rsb:selectedRectDisabledCornerRadius="6dp"
             rsb:showSelectedRectOverThumbs="true"
             rsb:selectedRectColor="#4e5d6c"
             rsb:showSelectedRectStroke="false"
